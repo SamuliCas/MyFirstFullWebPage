@@ -4,18 +4,18 @@ import { Navbar, Nav, NavDropdown, Container, Form, Button } from 'react-bootstr
 
 
 function App() {
-
   const [backendData, setBackendData] = useState([{}])
 
   useEffect(() => {
-    fetch("/api").then(
-      response => response.json()
-    ).then(
-      data => {
-        setBackendData(data)
-      }
-    )
-  }, [])
+    fetch("/users")
+      .then(response => response.json())
+      .then(data => {
+        setBackendData(data);
+      })
+      .catch(error => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   return (
     <div>
@@ -35,11 +35,11 @@ function App() {
         </Container>
       </Navbar>
 
-      {(typeof backendData.users === 'undefined')?(
+      {backendData.length === 0 ? (
         <p>Loading...</p>
-      ): (
-        backendData.users.map((user, i) => (
-          <p key={i}>{user}</p>
+      ) : (
+        backendData.map((user, i) => (
+          <p key={i}>{user.username}</p>
         ))
       )}
 
