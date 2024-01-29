@@ -1,2 +1,3 @@
-# MyFirstFullWebPage
-My first own full Express/Node + React Project
+ToDoList
+
+Basic to do list where user can add and delete things to do.
