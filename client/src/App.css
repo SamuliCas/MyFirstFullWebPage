@@ -1,0 +1,14 @@
+.todo-container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.todo-title {
+    margin-bottom: 30px;
+}
+
+.todo-listgroup {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
