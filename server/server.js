@@ -46,4 +46,29 @@ app.post('/addThingToDo', (req, res) => {
     });
   });
 
+  app.put('/updateCompleted/:id', (req, res) => {
+    const { id } = req.params;
+    const { completed } = req.body;
+
+    // Validate that the completed value is a boolean
+    if (typeof completed !== 'boolean') {
+        return res.status(400).json({ error: "Invalid completed value. Must be a boolean." });
+    }
+
+    const sql = "UPDATE todo SET completed = ? WHERE id = ?";
+    db.query(sql, [completed ? 1 : 0, id], (err, result) => {
+        if (err) {
+            console.error("Error updating completed to the database:", err);
+            return res.status(500).json({ error: "Internal server error." });
+        }
+
+        // Check if any rows were affected
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Task not found." });
+        }
+
+        res.json({ message: "Task updated successfully." });
+    });
+});
+
 app.listen(5000, () => { console.log("Server started on port 5000") })
