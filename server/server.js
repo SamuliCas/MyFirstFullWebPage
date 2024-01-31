@@ -16,7 +16,7 @@ const db = mysql.createConnection({
 
 // Define a route to fetch all things to do from the database
 app.get('/ThingToDo', (req, res)=> {
-    const sql = "SELECT * FROM ThingsToDo";
+    const sql = "SELECT * FROM todo";
     db.query(sql, (err, data)=> {
         if(err) return res.json(err);
         return res.json(data);
@@ -32,7 +32,7 @@ app.post('/addThingToDo', (req, res) => {
       return res.status(400).json({ error: "Thing to do required." });
     }
   
-    const sql = "INSERT INTO todo ThingToDo VALUES ?";
+    const sql = "INSERT INTO todo VALUES ?";
     db.query(sql, ThingToDo , (err, result) => {
       if (err) {
         console.error("Error adding thing to do to the database:", err);

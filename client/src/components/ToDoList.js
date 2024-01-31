@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Form, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
 
 export default function ToDoList () {
@@ -32,6 +32,13 @@ export default function ToDoList () {
             } 
         }))
     }
+
+    useEffect(() => {
+      fetch("http://localhost:5000/ThingToDo")
+        .then(response => response.json())
+        .then(data => setThings(data))
+    })
+
 
     console.log(things)
     return (    
