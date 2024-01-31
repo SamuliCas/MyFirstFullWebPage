@@ -31,9 +31,11 @@ app.post('/addThingToDo', (req, res) => {
     if (!ThingToDo) {
       return res.status(400).json({ error: "Thing to do required." });
     }
-  
-    const sql = "INSERT INTO todo VALUES ?";
-    db.query(sql, ThingToDo , (err, result) => {
+    
+    const { name, completed } = ThingToDo;
+
+    const sql = "INSERT INTO todo (name, completed) VALUES (?, ?)";
+    db.query(sql, [name, completed], (err, result) => {
       if (err) {
         console.error("Error adding thing to do to the database:", err);
         return res.status(500).json({ error: "Internal server error." });

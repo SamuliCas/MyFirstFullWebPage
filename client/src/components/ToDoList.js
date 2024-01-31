@@ -5,20 +5,50 @@ export default function ToDoList () {
     const [things, setThings] = useState([]);
     const [myInput, setMyInput] = useState("");
   
+    useEffect(() => {
+      fetchData();
+    }, []);
+
+    const fetchData = () => {
+      fetch("http://localhost:5000/ThingToDo")
+        .then(response => response.json())
+        .then(data => setThings(data))
+        .catch(error => console.error('Error fetching data:', error))
+    }
+
     function handleClick() {
-      const newThing = {
-        id: things.length,
-        name: myInput,
-        completed: false
-      };
       if(myInput !== '') {
-      setThings((prevThings) => [...prevThings, newThing]);
-      setMyInput("");
-      } else {
-        alert('Input empty')
+        const newThing = {
+          name: myInput,
+          completed: false
+        };
+
+          // Update the local state first
+          setThings([...things, newThing]);
+        
+          const reguestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type' : 'application/json'},
+            body: JSON.stringify(newThing)
+          };
+          
+          fetch('http://localhost:5000/addThingToDo', reguestOptions)
+            .then(response => response.json())
+            .then(data => {
+              console.log('New task added successfully:', data);
+            })
+            .catch(error => {
+              // If there's an error with the API call, you might want to handle it
+              console.error('Error adding new task:', error);
+            });  
+
+            // Clear the input field
+            setMyInput("")
+            } else {
+              alert('Input empty')
       }
     }
-  
+
     function deleteTodo(id) {
       setThings(things.filter(thing => thing.id !== id));
     }
@@ -33,14 +63,8 @@ export default function ToDoList () {
         }))
     }
 
-    useEffect(() => {
-      fetch("http://localhost:5000/ThingToDo")
-        .then(response => response.json())
-        .then(data => setThings(data))
-    })
-
-
     console.log(things)
+
     return (    
         <Container className="todo-container">
         <Form className="todo-list">
