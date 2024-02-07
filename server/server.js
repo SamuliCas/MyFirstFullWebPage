@@ -71,4 +71,17 @@ app.post('/addThingToDo', (req, res) => {
     });
 });
 
+  app.delete('/deleteThingToDo/:id', (req, res) => {
+    const { id } = req.params;
+
+    const sql = "DELETE FROM todo WHERE id = ?";
+    db.query(sql, [id], (err, result) => {
+      if(err) {
+        console.error("Error when trying to delete from database", err);
+        return res.status(500).json({ error: "Internal server error."});
+      }
+      res.json({ message: "Task updated successfully." });
+    })
+  })
+
 app.listen(5000, () => { console.log("Server started on port 5000") })

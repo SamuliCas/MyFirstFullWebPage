@@ -8,7 +8,7 @@ export default function ToDoList() {
     useEffect(() => {
         fetchData();
     }, []);
-
+    
     const fetchData = () => {
         fetch("http://localhost:5000/ThingToDo")
             .then(response => response.json())
@@ -38,6 +38,7 @@ export default function ToDoList() {
                 .then(data => {
                     setThings([...things, data])
                     setMyInput("")
+                    window.location.reload();
                 });
         } else {
             alert('Input empty')
@@ -45,7 +46,22 @@ export default function ToDoList() {
     }
 
     function deleteTodo(id) {
-        setThings(things.filter(thing => thing.id !== id));
+        fetch(`/deleteThingToDo/${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data.message);
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('There was a problem with the delete request:', error);
+        });
     }
 
     function toggleCompleted(id) {
@@ -109,5 +125,3 @@ export default function ToDoList() {
     )
 }
 
-
-// next thing to do is to make delete button work
